@@ -1,0 +1,11 @@
+The following settings will be used to create the application :
+
+Name :         {{ require }}{{ appname }}{{ end }}
+Project Path : {{ require }}{{ path }}{{ end }}
+CSRF Key :     {{ require }}{{ secret_key }}{{ end }}
+Virtualenv :   {% if virtualenv %}{{ enabled }}Enabled{{ end }}{% else %}{{ disabled }}Disabled{{ end }}{% endif %}
+Debug Mode :   {% if debug %}{{ enabled }}Enabled{{ end }}{% else %}{{ disabled }}Disabled{{ end }}{% endif %}
+{% if bower %}
+Bower
+{% for dependency in bower %}| {{ require }}{{ dependency }}{{ end }}
+{% endfor %}{% endif %}
