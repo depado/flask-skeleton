@@ -6,6 +6,7 @@ import argparse
 import shutil
 import jinja2
 import codecs
+import platform
 
 from utils import colors, query_yes_no, which
 
@@ -36,19 +37,26 @@ def main(argv):
     parser.add_argument('-v', '--virtualenv', action='store_true')
     args = parser.parse_args()
 
+    errors = []
     bower = None
+    bower_exe = None
     if args.bower:
         bower = args.bower.split(',')
         bower_exe = which('bower')
+        if not bower_exe:
+            errors.append('Bower executable could not be found.')
     virtualenv = args.virtualenv
     if virtualenv:
         virtualenv_exe = which('virtualenv')
+        if not virtualenv_exe:
+            errors.append('Virtualenv executable could not be found.')
     debug = args.no_debug
     appname = args.appname
     fullpath = os.path.join(cwd, appname)
     secret_key = codecs.encode(os.urandom(32), 'hex').decode('utf-8')
 
     template_var = {
+        'pyversion': platform.python_version(),
         'appname': appname,
         'bower': bower,
         'debug': debug,
@@ -61,11 +69,24 @@ def main(argv):
         'end': colors.ENDC
     }
 
+    if virtualenv:
+        template_var['virtualenv_exe'] = virtualenv_exe
+
+    if bower:
+        template_var['bower_exe'] = bower_exe
+
     template = template_env.get_template('brief.jinja2')
     print(template.render(template_var))
+    if len(errors) > 0:
+        template = template_env.get_template('errors.jinja2')
+        template_var = {
+            'errors': errors,
+            'red': colors.FAIL,
+            'end': colors.ENDC
+        }
+        print(template.render(template_var))
     validate = query_yes_no("Is this correct ?")
-    print(validate)
-    print(which('virtualenv'))
+    # TODO
 
 if __name__ == '__main__':
     main(sys.argv)
