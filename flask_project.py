@@ -36,6 +36,7 @@ def main(argv):
     parser.add_argument('-b', '--bower', help='Dependencies installed using bower')
     parser.add_argument('-n', '--no-debug', action='store_false')
     parser.add_argument('-v', '--virtualenv', action='store_true')
+    parser.add_argument('-d', '--database', action='store_true')
     args = parser.parse_args()
 
     errors = []
@@ -67,7 +68,8 @@ def main(argv):
         'require': colors.WARNING,
         'enabled': colors.OKGREEN,
         'disabled': colors.FAIL,
-        'end': colors.ENDC
+        'end': colors.ENDC,
+        'database': args.database
     }
 
     if virtualenv:
@@ -89,10 +91,16 @@ def main(argv):
         sys.exit(1)
 
     if query_yes_no("Is this correct ?"):
+        if args.database:
+            skeleton_dir = 'skel_db'
+            config_file = 'config_db.jinja2'
+        else:
+            skeleton_dir = 'skel'
+            config_file = 'config.jinja2'
         # Copying the whole skeleton into the new path. Error if the path already exists
         # TODO error handling here.
         print('Copying Skeleton...\t\t\t', end="", flush=True)
-        shutil.copytree(os.path.join(script_dir, 'skel'), fullpath)
+        shutil.copytree(os.path.join(script_dir, skeleton_dir), fullpath)
         print("{green}Ok{end}".format(green=colors.OKGREEN, end=colors.ENDC))
         # Creating the configuration file using the command line arguments
         print('Creating config file...\t\t\t', end="", flush=True)
