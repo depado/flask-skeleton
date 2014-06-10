@@ -104,7 +104,7 @@ def main(argv):
         print("{green}Ok{end}".format(green=colors.OKGREEN, end=colors.ENDC))
         # Creating the configuration file using the command line arguments
         print('Creating config file...\t\t\t', end="", flush=True)
-        template = template_env.get_template('config.jinja2')
+        template = template_env.get_template(config_file)
         template_var = {
             'secret_key': secret_key,
             'debug': debug,
