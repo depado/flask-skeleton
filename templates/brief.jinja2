@@ -6,6 +6,7 @@ Project Path :   {{ require }}{{ path }}{{ end }}
 CSRF Key :       {{ require }}{{ secret_key }}{{ end }}
 Virtualenv :     {% if virtualenv %}{{ enabled }}Enabled {{ end }}→ {% if virtualenv_exe %}{{ enabled }}{{ virtualenv_exe }} ({{ enabled }}{{ pyversion }}){{ end }}{% else %}{{ disabled }}Did not found Virtualenv execuable !{% endif %}{{ end }}{% else %}{{ disabled }}Disabled{{ end }}{% endif %}
 Database :       {% if database %}{{ enabled }}Yes{% else %}{{ disabled }}No{% endif %}{{ end }}
+Git :            {% if git %}{{ enabled }}Yes{% else %}{{ disabled }}No{% endif %}{{ end }}
 Debug Mode :     {% if debug %}{{ enabled }}Enabled{{ end }}{% else %}{{ disabled }}Disabled{{ end }}{% endif %}
 {% if bower %}
 Bower → {% if bower_exe %}{{ enabled }}{{ bower_exe }}{% else %}{{ disabled }}Did not found Bower executable !{% endif %}{{ end }}
