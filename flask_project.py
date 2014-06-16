@@ -37,6 +37,7 @@ def main(argv):
     parser.add_argument('-n', '--no-debug', action='store_false')
     parser.add_argument('-v', '--virtualenv', action='store_true')
     parser.add_argument('-d', '--database', action='store_true')
+    parser.add_argument('-g', '--git', action='store_true')
     args = parser.parse_args()
 
     errors = []
@@ -69,7 +70,8 @@ def main(argv):
         'enabled': colors.OKGREEN,
         'disabled': colors.FAIL,
         'end': colors.ENDC,
-        'database': args.database
+        'database': args.database,
+        'git': args.git
     }
 
     if virtualenv:
@@ -166,6 +168,26 @@ def main(argv):
                         end=colors.ENDC,
                         dep=dependency))
                 print("{green}Ok{end}".format(green=colors.OKGREEN, end=colors.ENDC))
+
+        if args.git:
+            print('Git Init...\t\t\t\t', end="", flush=True)
+            output, error = subprocess.Popen(
+                ['git', 'init', fullpath],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            ).communicate()
+            if error:
+                with open('git_error.log', 'w') as fd:
+                    fd.write(error.decode('utf-8'))
+                    print("{red}An error occured during the creation of the virtualenv. Please consult {yellow}virtualenv_error.log{red} file for details.{end}".format(
+                        red=colors.FAIL,
+                        yellow=colors.WARNING,
+                        end=colors.ENDC))
+                    sys.exit(2)
+            print("{green}Ok{end}".format(green=colors.OKGREEN, end=colors.ENDC))
+            print('Generating Gitignore...\t\t\t', end="", flush=True)
+            shutil.copyfile(os.path.join(script_dir, 'templates', 'gitignore'), os.path.join(fullpath, '.gitignore'))
+            print("{green}Ok{end}".format(green=colors.OKGREEN, end=colors.ENDC))
 
     else:
         print("Aborting")
