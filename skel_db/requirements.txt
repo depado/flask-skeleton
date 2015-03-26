@@ -5,4 +5,3 @@ MarkupSafe
 Werkzeug
 itsdangerous
 Flask-SQLAlchemy
-Flask-Migrate

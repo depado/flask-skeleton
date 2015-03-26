@@ -19,16 +19,20 @@ script_dir = os.path.dirname(os.path.realpath(__file__))
 template_loader = jinja2.FileSystemLoader(searchpath=os.path.join(script_dir, "templates"))
 template_env = jinja2.Environment(loader=template_loader)
 
+
 def generate_help(name):
     template = template_env.get_template('help.jinja2')
     return template.render({'name': name, 'require': colors.WARNING, 'end': colors.ENDC})
 
-def generate_brief(name, bower, debug, virtualenv):
 
+def generate_brief(template_var):
+    template = template_env.get_template('brief.jinja2')
     return template.render(template_var)
+
 
 def generate_crsf_secret_key():
     return 
+
 
 def main(argv):
     parser = argparse.ArgumentParser(description='Create a flask skeleton application using some command line options.')
@@ -49,10 +53,13 @@ def main(argv):
         if not bower_exe:
             errors.append('Bower executable could not be found.')
     virtualenv = args.virtualenv
+    virtualenv_exe = None
     if virtualenv:
         virtualenv_exe = shutil.which('virtualenv')
         if not virtualenv_exe:
             errors.append('Virtualenv executable could not be found.')
+            virtualenv = False
+
     debug = args.no_debug
     appname = args.appname
     fullpath = os.path.join(cwd, appname)
@@ -80,8 +87,7 @@ def main(argv):
     if bower:
         template_var['bower_exe'] = bower_exe
 
-    template = template_env.get_template('brief.jinja2')
-    print(template.render(template_var))
+    print(generate_brief(template_var))
     if len(errors) > 0:
         template = template_env.get_template('errors.jinja2')
         template_var = {
@@ -179,10 +185,11 @@ def main(argv):
             if error:
                 with open('git_error.log', 'w') as fd:
                     fd.write(error.decode('utf-8'))
-                    print("{red}An error occured during the creation of the virtualenv. Please consult {yellow}virtualenv_error.log{red} file for details.{end}".format(
-                        red=colors.FAIL,
-                        yellow=colors.WARNING,
-                        end=colors.ENDC))
+                    print("{red}An error occured during the creation of the virtualenv. Please consult "
+                          "{yellow}virtualenv_error.log{red} file for details.{end}".format(
+                              red=colors.FAIL,
+                              yellow=colors.WARNING,
+                              end=colors.ENDC))
                     sys.exit(2)
             print("{green}Ok{end}".format(green=colors.OKGREEN, end=colors.ENDC))
             print('Generating Gitignore...\t\t\t', end="", flush=True)

@@ -6,3 +6,4 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 CSRF_ENABLED = True
 SECRET_KEY = '{{ secret_key }}'
 DEBUG = {{ debug }}
+LOG_FILE = os.path.join(basedir, 'log/app_logger.log')

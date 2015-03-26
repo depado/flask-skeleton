@@ -1,6 +1,7 @@
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+LOG_FILE = os.path.join(basedir, 'log/app_logger.log')
 CSRF_ENABLED = True
 SECRET_KEY = '{{ secret_key }}'
 DEBUG = {{ debug }}
