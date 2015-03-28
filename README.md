@@ -4,7 +4,7 @@
 The main goal of this project is to generate easily a skeleton for a simple or more complex Flask application.
 
 ### Arguments and Usage ###
-[See a simple demonstration using Asciinema][1]
+[![asciicast](https://asciinema.org/a/10051.png)](https://asciinema.org/a/10051)
 
 The simpler way for now to use this script is to add the path as an alias in your .bashrc / fish.config.
 Exemple :
@@ -27,5 +27,3 @@ And then use it by just calling `flaskeleton`
  Initialise an empty git repository in the folder and copy a sample gitignore file so you don't add some things like all your .pyc to your project by mistake.
  
 
-
-  [1]: https://asciinema.org/a/10051
