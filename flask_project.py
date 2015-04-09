@@ -20,11 +20,6 @@ template_loader = jinja2.FileSystemLoader(searchpath=os.path.join(script_dir, "t
 template_env = jinja2.Environment(loader=template_loader)
 
 
-def generate_help(name):
-    template = template_env.get_template('help.jinja2')
-    return template.render({'name': name, 'require': colors.WARNING, 'end': colors.ENDC})
-
-
 def generate_brief(template_var):
     template = template_env.get_template('brief.jinja2')
     return template.render(template_var)
